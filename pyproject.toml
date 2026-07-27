@@ -1,0 +1,40 @@
+[project]
+name = "dogs-breed"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "flashBNK",email = "lolmaks23@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django (>=6.0.7,<7.0.0)",
+    "djangorestframework (>=3.17.1,<4.0.0)",
+    "psycopg[binary] (>=3.3.4,<4.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "dogs_breed", from = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "ruff (>=0.16.0,<0.17.0)",
+    "pre-commit (>=4.6.1,<5.0.0)"
+]
+
+
+[tool.ruff]
+line-length = 119
+target-version = "py313"
+
+[tool.ruff.lint]
+
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
