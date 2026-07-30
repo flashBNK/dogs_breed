@@ -1,6 +1,9 @@
+import logging
 import time
 
 from django.db import connection, reset_queries
+
+logger = logging.getLogger(__name__)
 
 
 def speed_queryset(queryset):
@@ -12,15 +15,12 @@ def speed_queryset(queryset):
 
     elapsed = (time.perf_counter() - start) * 1000
 
-    print("=" * 100)
-    print(f"SQL-запросов: {len(connection.queries)}")
-    print(f"Время: {elapsed:.2f} ms")
-    print()
+    logger.info("SQL-запросов: %s", len(connection.queries))
+    logger.info("Время: %s ms", elapsed)
 
     for i, query in enumerate(connection.queries, start=1):
-        print(f"Запрос №{i}")
-        print(f"SQL time: {query['time']} sec")
-        print(query["sql"])
-        print("-" * 100)
+        logger.info("Запрос № %s", i)
+        logger.info("SQL time: %s sec", query["time"])
+        logger.info(query["sql"])
 
     return result

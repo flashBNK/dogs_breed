@@ -1,4 +1,4 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Q
 
@@ -21,10 +21,10 @@ class Breed(models.Model):
         constraints = [
             models.CheckConstraint(
                 condition=(
-                        Q(friendliness__range=(1, 5))
-                        & Q(shedding_amount__range=(1, 5))
-                        & Q(exercise_needs__range=(1, 5))
-                        & Q(trainability__range=(1, 5))
+                    Q(friendliness__range=(1, 5))
+                    & Q(shedding_amount__range=(1, 5))
+                    & Q(exercise_needs__range=(1, 5))
+                    & Q(trainability__range=(1, 5))
                 ),
                 name="breed_rating_range",
             ),

@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Dog, Breed
+
+from .models import Breed, Dog
 
 
 class BreedSerializer(serializers.ModelSerializer):
@@ -20,11 +21,9 @@ class DogListSerializer(serializers.ModelSerializer):
     breed = BreedSerializer()
     average_age = serializers.FloatField(read_only=True)
 
-
     class Meta:
         model = Dog
         fields = ["id", "name", "age", "breed", "gender", "color", "favorite_food", "favorite_toy", "average_age"]
-
 
 
 class DogDetailSerializer(serializers.ModelSerializer):
@@ -33,4 +32,15 @@ class DogDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Dog
-        fields = ["name", "age", "breed", "gender", "color", "favorite_food", "favorite_toy", "dogs_count"]
+        fields = ["id", "name", "age", "breed", "gender", "color", "favorite_food", "favorite_toy", "dogs_count"]
+
+
+class DogWriteSerializer(serializers.ModelSerializer):
+    breed = serializers.PrimaryKeyRelatedField(queryset=Breed.objects.all())
+
+    class Meta:
+        model = Dog
+        fields = ["id", "name", "age", "breed", "gender", "color", "favorite_food", "favorite_toy"]
+
+    def to_representation(self, instance):
+        return DogSerializer(instance, context=self.context).data
