@@ -15,12 +15,12 @@ def speed_queryset(queryset):
 
     elapsed = (time.perf_counter() - start) * 1000
 
-    logger.info("SQL-запросов: %s", len(connection.queries))
-    logger.info("Время: %s ms", elapsed)
+    logger.debug("SQL-запросов: %s", len(connection.queries))
+    logger.debug("Время: %s ms", elapsed)
 
     for i, query in enumerate(connection.queries, start=1):
-        logger.info("Запрос № %s", i)
-        logger.info("SQL time: %s sec", query["time"])
-        logger.info(query["sql"])
+        logger.debug("Запрос № %s", i)
+        logger.debug("SQL time: %s sec", query["time"])
+        logger.debug(query["sql"])
 
     return result

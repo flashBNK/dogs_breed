@@ -1,8 +1,9 @@
 from django.db.models import Avg, Count, F, OuterRef, Subquery, Window
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Dog
-from .serializers import DogDetailSerializer, DogListSerializer, DogSerializer, DogWriteSerializer
+from .models import Dog, Breed
+from .serializers import (DogDetailSerializer, DogListSerializer, DogSerializer,
+                          DogWriteSerializer, BreedSerializer, BreedListSerializer)
 from .speed_tester import speed_queryset
 
 
@@ -10,6 +11,7 @@ class DogViewSet(ModelViewSet):
     def get_queryset(self):
         if self.action == "list":
             # queryset = Dog.objects.select_related("breed").annotate(average_age=Avg("breed__dogs__age"))
+            # плодит квадрат промежуточных строк
 
             queryset = Dog.objects.select_related("breed").annotate(
                 average_age=Window(expression=Avg("age"), partition_by=[F("breed_id")])
@@ -27,7 +29,7 @@ class DogViewSet(ModelViewSet):
             speed_queryset(queryset)
             return queryset
 
-        return Dog.objects.select_related().all()
+        return Dog.objects.select_related("breed").all()
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -41,4 +43,17 @@ class DogViewSet(ModelViewSet):
 
 
 class BreedViewSet(ModelViewSet):
-    pass
+    def get_queryset(self):
+        if self.action == "list":
+            # queryset = Breed.objects.annotate(dogs_count=Window(expression=Count("dogs"), partition_by=[F("id")]))
+            queryset = Breed.objects.annotate(dogs_count=Count("dogs")) # быстрее, чем через window
+
+            speed_queryset(queryset)
+            return queryset
+
+        return Breed.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return BreedListSerializer
+        return BreedSerializer

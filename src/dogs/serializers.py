@@ -17,6 +17,14 @@ class DogSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class BreedListSerializer(serializers.ModelSerializer):
+    dogs_count = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Breed
+        fields = ["id", "name", "size", "friendliness", "shedding_amount", "exercise_needs", "trainability", "dogs_count"]
+
+
 class DogListSerializer(serializers.ModelSerializer):
     breed = BreedSerializer()
     average_age = serializers.FloatField(read_only=True)

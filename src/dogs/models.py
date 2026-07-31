@@ -18,6 +18,7 @@ class Breed(models.Model):
     trainability = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
 
     class Meta:
+        ordering = ["id"]
         constraints = [
             models.CheckConstraint(
                 condition=(
@@ -49,3 +50,6 @@ class Dog(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ["id"]
