@@ -8,7 +8,6 @@ venv/
 .idea
 
 .env
-.env.*
 
 db.sqlite3
 media/

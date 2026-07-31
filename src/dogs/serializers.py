@@ -22,7 +22,16 @@ class BreedListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Breed
-        fields = ["id", "name", "size", "friendliness", "shedding_amount", "exercise_needs", "trainability", "dogs_count"]
+        fields = [
+            "id",
+            "name",
+            "size",
+            "friendliness",
+            "shedding_amount",
+            "exercise_needs",
+            "trainability",
+            "dogs_count",
+        ]
 
 
 class DogListSerializer(serializers.ModelSerializer):

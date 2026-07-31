@@ -31,12 +31,11 @@ class BreedFactory(DjangoModelFactory):
 class DogFactory(DjangoModelFactory):
     name = factory.Faker("first_name")
     age = FuzzyInteger(1, 30)
-    breed = factory.SubFactory(BreedFactory) # автоматически создаёт породы
+    breed = factory.SubFactory(BreedFactory)  # автоматически создаёт породы
     gender = FuzzyChoice([choice[0] for choice in Dog.Gender.choices])
     color = factory.Faker("color")
     favorite_food = factory.Faker("word")
     favorite_toy = factory.Faker("word")
-
 
     class Meta:
         model = Dog

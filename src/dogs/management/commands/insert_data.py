@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from ...factories import BreedFactory, DogFactory
+from ...factories import DogFactory
 
 DOGS_COUNT = 20
 

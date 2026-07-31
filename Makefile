@@ -1,4 +1,4 @@
-.PHONY: help install run test lint format ruff check clean
+.PHONY: help install run test lint format ruff check clean insert_data, test
 
 help:            ## Показать список команд
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -23,3 +23,9 @@ check:           ## Проверка без изменений (для CI): фо
 
 clean:           ## Удалить кэши
 	rm -rf .ruff_cache .pytest_cache __pycache__
+
+insert_data:	 ## Наполнить БД данными о собаках и породах (внутри docker контейнера). Безопасна для повторного запуска
+	docker compose run --rm web-app sh -c "python manage.py insert_data"
+
+test:			 ## Запустить тесты (внутри docker контейнера)
+	docker compose run --rm web-app sh -c "poetry run pytest"

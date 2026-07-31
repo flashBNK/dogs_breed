@@ -1,9 +1,15 @@
 from django.db.models import Avg, Count, F, OuterRef, Subquery, Window
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Dog, Breed
-from .serializers import (DogDetailSerializer, DogListSerializer, DogSerializer,
-                          DogWriteSerializer, BreedSerializer, BreedListSerializer)
+from .models import Breed, Dog
+from .serializers import (
+    BreedListSerializer,
+    BreedSerializer,
+    DogDetailSerializer,
+    DogListSerializer,
+    DogSerializer,
+    DogWriteSerializer,
+)
 from .speed_tester import speed_queryset
 
 
@@ -46,7 +52,7 @@ class BreedViewSet(ModelViewSet):
     def get_queryset(self):
         if self.action == "list":
             # queryset = Breed.objects.annotate(dogs_count=Window(expression=Count("dogs"), partition_by=[F("id")]))
-            queryset = Breed.objects.annotate(dogs_count=Count("dogs")) # быстрее, чем через window
+            queryset = Breed.objects.annotate(dogs_count=Count("dogs")).order_by("id")  # быстрее, чем через window
 
             speed_queryset(queryset)
             return queryset
