@@ -8,7 +8,7 @@ from .serializers import (
     DogDetailSerializer,
     DogListSerializer,
     DogSerializer,
-    DogWriteSerializer,
+    DogWriteSerializer, BreedDetailSerializer,
 )
 from .speed_tester import speed_queryset
 
@@ -17,7 +17,7 @@ class DogViewSet(ModelViewSet):
     def get_queryset(self):
         if self.action == "list":
             # queryset = Dog.objects.select_related("breed").annotate(average_age=Avg("breed__dogs__age"))
-            # плодит квадрат промежуточных строк
+            # плодит квадрат промежуточных строк -> дорого по памяти + медленнее при больших количествах собак
 
             queryset = Dog.objects.select_related("breed").annotate(
                 average_age=Window(expression=Avg("age"), partition_by=[F("breed_id")])
@@ -56,10 +56,17 @@ class BreedViewSet(ModelViewSet):
 
             speed_queryset(queryset)
             return queryset
+        elif self.action == "retrieve":
+            queryset = Breed.objects.prefetch_related("dogs")
+
+            speed_queryset(queryset)
+            return queryset
 
         return Breed.objects.all()
 
     def get_serializer_class(self):
         if self.action == "list":
             return BreedListSerializer
+        elif self.action == "retrieve":
+            return BreedDetailSerializer
         return BreedSerializer

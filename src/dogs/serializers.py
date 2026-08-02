@@ -61,3 +61,17 @@ class DogWriteSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return DogSerializer(instance, context=self.context).data
+
+
+class DogNestedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dog
+        fields = ["id", "name", "age", "gender", "color", "favorite_food", "favorite_toy"]
+
+
+class BreedDetailSerializer(serializers.ModelSerializer):
+    dogs = DogNestedSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Breed
+        fields = ["id", "name", "size", "friendliness", "shedding_amount", "exercise_needs", "trainability", "dogs"]
